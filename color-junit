@@ -4,20 +4,33 @@ import re, sys
 
 STATUS_RE = re.compile(
     '\s+\[junit\] Tests run: [\d]+, Failures: ([\d]+), Errors: ([\d]+)')
+EXCEPT_RE = re.compile(
+    '\s+\[junit\] (Exception in |\tat \w+|Caused by: )')
+
 RED = "\033[1;31m%s\033[0m"
 GREEN = "\033[1;32m%s\033[0m"
+YELLOW = "\033[1;33m%s\033[0m"
+
+def colorize(line):
+    match = STATUS_RE.match(line)
+    if match:
+        (failures, errors) = match.groups()
+        if (int(failures)) > 0 or (int(errors) > 0):
+            sys.stdout.write(RED % line)
+        else:
+            sys.stdout.write(GREEN % line)
+        return True
+    
+    match = EXCEPT_RE.match(line)
+    if match:
+        sys.stdout.write(YELLOW % line)
+        return True
+        
+    return False
 
 if __name__ == '__main__':
     line = sys.stdin.readline()
     while(line):
-        match = STATUS_RE.match(line)
-        if match:
-            (failures, errors) = match.groups()
-            if (int(failures)) > 0 or (int(errors) > 0):
-                sys.stdout.write(RED % line)
-            else:
-                sys.stdout.write(GREEN % line)
-        else:
+        if not colorize(line):
             sys.stdout.write(line)
-            
         line = sys.stdin.readline()
