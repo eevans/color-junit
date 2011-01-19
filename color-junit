@@ -3,9 +3,9 @@
 import re, sys
 
 STATUS_RE = re.compile(
-    '\s+\[junit\] Tests run: [\d]+, Failures: ([\d]+), Errors: ([\d]+)')
+    '(?:\s+\[junit\] )?Tests run: [\d]+, Failures: ([\d]+), Errors: ([\d]+)')
 EXCEPT_RE = re.compile(
-    '\s+\[junit\] (Exception in |\tat \w+|Caused by: )')
+    '(?:\s+\[junit\] )?(Exception in |\tat \w+|Caused by: )')
 
 RED = "\033[1;31m%s\033[0m"
 GREEN = "\033[1;32m%s\033[0m"
