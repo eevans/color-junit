@@ -61,3 +61,4 @@ if __name__ == '__main__':
         if not colorize(line):
             sys.stdout.write(line)
         line = sys.stdin.readline()
+        sys.stdout.flush()
